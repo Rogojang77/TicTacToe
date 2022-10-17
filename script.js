@@ -1,9 +1,18 @@
-let cells = document.querySelectorAll('.cell');
 let move = 1;
 let remainingMoves = true;
 let currentPlayer = 'X';
 let statusDisplay = document.querySelector('.playerStatus');
 let gameState = ["", "", "", "", "", "", "", "", ""];
+
+
+let grid = document.getElementById("grid");
+for (let i = 0; i < 9; ++i) {  
+    let cell = document.createElement("div");
+    grid.appendChild(cell).className = "cell";
+}
+
+let cells = document.querySelectorAll('.cell');
+
 
 const winningMessage = () => `Player ${currentPlayer} has won!`;
 const drawMessage = () => `Game ended in a draw!`;
