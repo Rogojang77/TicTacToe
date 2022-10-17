@@ -1,0 +1,35 @@
+.page {
+  font-family: "Arial", sans-serif;
+  text-align: center;
+}
+
+h1 {
+  font-size: 50px;
+  color: #000000;
+  margin: 10px auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+  grid-gap: 10px;
+  background-color: #fff;
+  color: #444;
+  width: 306px;
+  margin: 10px auto;
+}
+
+.cell {
+  font-family: "Permanent Marker", cursive;
+  width: 100px;
+  height: 100px;
+  box-shadow: 2px 2px 2px 2px #201709;
+  border: 2px solid #4a453e;
+  cursor: pointer;
+  line-height: 100px;
+  font-size: 60px;
+}
+
+.grid :hover {
+  background-color: rgb(209, 204, 204);
+}
