@@ -1,24 +1,42 @@
-let move = 1;
 let remainingMoves = true;
 let currentPlayer = 'X';
 let statusDisplay = document.querySelector('.playerStatus');
-let gameState = ["", "", "", "", "", "", "", "", ""];
+let cellInner = ["", "", "", "", "", "", "", "", ""];
 
-let grid = document.getElementById("grid");
-for (let i = 0; i < 9; ++i) {  
-    let cell = document.createElement("div");
-    grid.appendChild(cell).className = "cell";
-}
-
-let cells = document.querySelectorAll('.cell');
-
+const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
 const winningMessage = () => `Player ${currentPlayer} has won!`;
 const drawMessage = () => `Game ended in a draw!`;
-const currentPlayerTurn = () => `It's ${currentPlayer}'s turn`;
 
-statusDisplay.innerHTML = currentPlayerTurn();
+function createrGrid() {
+    let grid = document.getElementById("grid");
+    for (let i = 0; i < 9; ++i) {  
+        let cell = document.createElement("div");
+        grid.appendChild(cell).className = "cell";
+    }
+}
 
-const winningConditions = [
+window.onload = function() {
+    createrGrid();
+    statusDisplay.innerHTML = currentPlayerTurn();
+    let cells = document.querySelectorAll('.cell');
+    for (let i = 0; i < cells.length; ++i) {
+        let cell = cells[i];
+        cell.onclick = () => {
+            if (cellInner[i] == '' && remainingMoves) {
+                cellInner[i] = currentPlayer;
+                cell.innerHTML = currentPlayer;
+                handleResultValidation();
+            }
+        }
+    }
+}
+
+function playerStatus() {
+    currentPlayer = currentPlayer === "X" ? "0" : "X";
+    statusDisplay.innerHTML = currentPlayerTurn();
+}
+
+const winningCells = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -29,42 +47,19 @@ const winningConditions = [
     [2, 4, 6]
 ];
 
-function statusPlayerChange() {
-    currentPlayer = currentPlayer === "X" ? "0" : "X";
-    statusDisplay.innerHTML = currentPlayerTurn();
-}
-
-for (let i = 0; i < cells.length; ++i) {
-    let cell = cells[i];
-    cell.onclick = function xOr0() {
-        if(gameState[i] == '' && remainingMoves){
-            if(move % 2 == 1){
-                currentPlayer = 'X';
-            } else {
-                currentPlayer = '0';
-            }
-            gameState[i] = currentPlayer;
-            cell.innerHTML = currentPlayer; 
-            move++;
-            handleResultValidation();
-        }     
-    }
-}
-
 function handleResultValidation() {
     let roundWon = false;
     for (let i = 0; i < 8; i++) {
-        const winCondition = winningConditions[i];
-        let a = gameState[winCondition[0]];
-        let b = gameState[winCondition[1]];
-        let c = gameState[winCondition[2]];
-        if (a === '' || b === '' || c === '') {
+        let winCondition = winningCells[i];
+        let firstCell = cellInner[winCondition[0]];
+        let secondCell = cellInner[winCondition[1]];
+        let thirdCell = cellInner[winCondition[2]];
+        if (firstCell === '' || secondCell === '' || thirdCell === '') {
             continue;
-        }
-        if (a === b && b === c) {
+        } else if (firstCell === secondCell && secondCell === thirdCell) {
             roundWon = true;
             remainingMoves = false;
-            break
+            break;
         }
     }
 
@@ -73,10 +68,9 @@ function handleResultValidation() {
         return;
     }
 
-    let roundDraw = !gameState.includes("");
-    if (roundDraw) {
+    if (!cellInner.includes("")) {
         statusDisplay.innerHTML = drawMessage();
         return;
     }
-    statusPlayerChange();
+    playerStatus();
 }
